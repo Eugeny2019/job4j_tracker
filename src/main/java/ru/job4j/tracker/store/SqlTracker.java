@@ -36,7 +36,7 @@ public class SqlTracker implements Store {
 
     @Override
     public Item add(Item item) {
-        try (PreparedStatement statement = cn.prepareStatement("insert into tracker(name) values (?)", Statement.RETURN_GENERATED_KEYS)){
+        try (PreparedStatement statement = cn.prepareStatement("insert into tracker(name) values (?)", Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, item.getName());
             statement.execute();
             try (ResultSet generatedKey = statement.getGeneratedKeys()) {
@@ -52,7 +52,7 @@ public class SqlTracker implements Store {
 
     @Override
     public boolean replace(int id, Item item) {
-        try (PreparedStatement statement = cn.prepareStatement("update tracker set name=? where id=?")){
+        try (PreparedStatement statement = cn.prepareStatement("update tracker set name=? where id=?")) {
             statement.setString(1, item.getName());
             statement.setInt(2, id);
             statement.execute();
@@ -64,7 +64,7 @@ public class SqlTracker implements Store {
 
     @Override
     public boolean delete(int id) {
-        try (PreparedStatement statement = cn.prepareStatement("delete from tracker where id=?")){
+        try (PreparedStatement statement = cn.prepareStatement("delete from tracker where id=?")) {
             statement.setInt(1, id);
             statement.execute();
         } catch (SQLException e) {
@@ -76,7 +76,7 @@ public class SqlTracker implements Store {
     @Override
     public List<Item> findAll() {
         List<Item> items = new ArrayList<>();
-        try (PreparedStatement statement = cn.prepareStatement("select * from tracker order by id asc")){
+        try (PreparedStatement statement = cn.prepareStatement("select * from tracker order by id asc")) {
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     items.add(new Item(
@@ -94,7 +94,7 @@ public class SqlTracker implements Store {
     @Override
     public List<Item> findByName(String key) {
         List<Item> items = new ArrayList<>();
-        try (PreparedStatement statement = cn.prepareStatement("select * from tracker where name like ? order by id asc")){
+        try (PreparedStatement statement = cn.prepareStatement("select * from tracker where name like ? order by id asc")) {
             statement.setString(1, "%" + key + "%");
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
@@ -113,7 +113,7 @@ public class SqlTracker implements Store {
     @Override
     public Item findById(int id) {
         Item item = null;
-        try (PreparedStatement statement = cn.prepareStatement("select * from tracker where id=?")){
+        try (PreparedStatement statement = cn.prepareStatement("select * from tracker where id=?")) {
             statement.setInt(1, id);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
