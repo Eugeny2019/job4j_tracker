@@ -40,8 +40,9 @@ public class SqlTracker implements Store {
 
     @Override
     public Item add(Item item) {
-        try (PreparedStatement statement = cn.prepareStatement("insert into items(name) values (?)", Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement statement = cn.prepareStatement("insert into items(name, created) values (?, ?)", Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, item.getName());
+            statement.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
             statement.execute();
             try (ResultSet generatedKey = statement.getGeneratedKeys()) {
                 if (generatedKey.next()) {
@@ -85,7 +86,8 @@ public class SqlTracker implements Store {
                 while (resultSet.next()) {
                     items.add(new Item(
                             resultSet.getInt("id"),
-                            resultSet.getString("name"))
+                            resultSet.getString("name"),
+                            resultSet.getTimestamp("created").toLocalDateTime())
                     );
                 }
             }
@@ -104,7 +106,8 @@ public class SqlTracker implements Store {
                 while (resultSet.next()) {
                     items.add(new Item(
                             resultSet.getInt("id"),
-                            resultSet.getString("name"))
+                            resultSet.getString("name"),
+                            resultSet.getTimestamp("created").toLocalDateTime())
                     );
                 }
             }
@@ -121,7 +124,9 @@ public class SqlTracker implements Store {
             statement.setInt(1, id);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    item = new Item(resultSet.getInt("id"), resultSet.getString("name"));
+                    item = new Item(resultSet.getInt("id"),
+                            resultSet.getString("name"),
+                            resultSet.getTimestamp("created").toLocalDateTime());
                 }
             }
         } catch (SQLException e) {
