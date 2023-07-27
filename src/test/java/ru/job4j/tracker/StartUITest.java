@@ -54,10 +54,8 @@ public class StartUITest {
         memTracker.add(item);
         FindAllAction act = new FindAllAction();
         act.execute(new StubInput(new String[] {}), memTracker);
-        String expect = new StringJoiner(System.lineSeparator(), "", System.lineSeparator())
-                .add(String.format("id: %s, name: %s", item.getId(), item.getName()))
-                .toString();
-        assertThat(out.toString()).isEqualTo(expect);
+        String expect = String.format("id: %s, name: %s, created: %s", item.getId(), item.getName(), item.getCreated());
+        assertThat(out.toString().trim()).isEqualTo(expect);
         System.setOut(def);
     }
 
@@ -71,10 +69,8 @@ public class StartUITest {
         memTracker.add(item);
         FindByNameAction act = new FindByNameAction();
         act.execute(new StubInput(new String[] {"fix bug"}), memTracker);
-        String expect = new StringJoiner(System.lineSeparator(), "", System.lineSeparator())
-                .add(String.format("id: %s, name: %s", item.getId(), item.getName()))
-                .toString();
-        assertThat(out.toString()).isEqualTo(expect);
+        String expect = String.format("id: %s, name: %s, created: %s", item.getId(), item.getName(), item.getCreated());
+        assertThat(out.toString().trim()).isEqualTo(expect);
         System.setOut(def);
     }
 }

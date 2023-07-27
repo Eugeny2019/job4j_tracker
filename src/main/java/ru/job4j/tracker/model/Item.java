@@ -33,6 +33,10 @@ public class Item {
         this.created = created;
     }
 
+    public String getCreated() {
+        return created.format(FORMATTER);
+    }
+
     public void setId(int id) {
         this.id = id;
     }
